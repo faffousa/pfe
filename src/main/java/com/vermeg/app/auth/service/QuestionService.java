@@ -9,7 +9,14 @@ import com.vermeg.app.auth.repo.UserRepository;
 import com.vermeg.app.entity.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.Fields;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -17,6 +24,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
+
+    private int totalQuestions = 1;
+
     @Autowired
     QuestionRepository questionrepository;
 
@@ -31,6 +41,9 @@ public class QuestionService {
     @Autowired
     RestTemplateBuilder restTemplateBuilder;
 
+    @Autowired
+    MongoTemplate mongoTemplate;
+
     private static final String GET_USER_BY_ID_API = "http://localhost:8082/api/auth/getUser/{id}";
 
     public User getUserByRestTemplate(long id){
@@ -41,6 +54,7 @@ public class QuestionService {
     }
 
     public Question addQuestion(Question question, long id){
+
         User user = getUserByRestTemplate(id);
         question.setIdQuestion(sequenceGeneratorService.generateSequence(Question.SEQUENCE_NAME));
         question.setUser(user);
@@ -49,6 +63,10 @@ public class QuestionService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
         question.setDate(date);
+
+
+
+        question.setTotalQuestions(totalQuestions);
         return questionrepository.save(question);
     }
 
@@ -150,8 +168,8 @@ public class QuestionService {
     }
 
 
-    public List<Question> getFavoriteQuestionsByUserId(Long iduser) {
-        User user = userrepository.findById(iduser).orElse(null);
+    public List<Question> getFavoriteQuestionsByUserId(Long userId) {
+        User user = userrepository.findById(userId).orElse(null);
 
         if (user != null) {
             List<Long> favoriteQuestionIds = user.getFavoriteQuestions();
@@ -167,9 +185,43 @@ public class QuestionService {
             return favoriteQuestions;
         }
 
-        return Collections.emptyList(); // Utilisateur non trouvé ou pas de questions favorites
+        return Collections.emptyList();
     }
 
+    public void removeQuestionFromFavorites(Long userId, Long idQuestion) {
+        User user = userrepository.findById(userId).orElse(null);
+        Question question = questionrepository.findById(idQuestion).orElse(null);
+
+        if (user != null && question != null) {
+            // Vérifiez si la question est dans les favoris de l'utilisateur
+            if (user.getFavoriteQuestions().contains(idQuestion)) {
+                user.getFavoriteQuestions().remove(idQuestion); // Supprime la question des favoris
+                userrepository.save(user);
+            }
+        }
+    }
+
+
+
+    //@Scheduled(fixedRate = 60000) // Exécute la méthode toutes les 2 minutes (2 * 60 000 millisecondes)
+
+    public List<Question> getCategoryStatistics() {
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.group("Category")
+                        .sum("TotalQuestions").as("TotalQuestions"), // Utilisez sum() pour obtenir la somme réelle de nbrRep
+                Aggregation.project(Fields.fields("_id", "TotalQuestions"))
+                        .and("Category").previousOperation(),
+                Aggregation.sort(Sort.by(Sort.Order.desc("TotalQuestions")))
+        );
+
+
+        AggregationResults<Question> results = mongoTemplate.aggregate(aggregation, "question", Question.class);
+        System.out.println(results.getMappedResults());
+
+
+        return results.getMappedResults();
+
+    }
 
 
 

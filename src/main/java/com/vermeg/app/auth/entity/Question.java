@@ -10,9 +10,10 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.persistence.Column;
 import java.util.List;
 
-@Document
+@Document(collection = "question")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,6 +23,7 @@ public class Question {
     @Transient
     public static final String SEQUENCE_NAME = "question_sequence";
 
+    @Column(name = "QUESTION_ID")
     @Id
     private long idQuestion;
 
@@ -47,6 +49,11 @@ public class Question {
 
     @Field(value = "Message")
     private Boolean message;
+
+    @Field(value = "TotalQuestions")
+
+    private long totalQuestions;
+
 
 
 

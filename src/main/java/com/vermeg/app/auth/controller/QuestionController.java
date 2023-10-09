@@ -3,6 +3,7 @@ package com.vermeg.app.auth.controller;
 import com.vermeg.app.auth.entity.Question;
 import com.vermeg.app.auth.entity.Reponse;
 import com.vermeg.app.auth.repo.QuestionRepository;
+import com.vermeg.app.auth.service.NotificationService;
 import com.vermeg.app.auth.service.QuestionService;
 import com.vermeg.app.entity.Post;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,14 @@ public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
 
+    @Autowired
+    NotificationService notificationService;
+
 
     @PostMapping("/add/{id}")
     public ResponseEntity<Question> addCart(@RequestBody Question question, @PathVariable("id") long id) throws Exception {
         Question newQuestion = questionservice.addQuestion(question, id);
+        notificationService.sendQuestionAddedNotification();
         return new ResponseEntity<>(newQuestion, HttpStatus.CREATED);
     }
     @GetMapping("/all")
@@ -102,10 +107,29 @@ public class QuestionController {
 
 
     @GetMapping("/favouris/{iduser}")
-    public List<Question> getFavoriteQuestions(@PathVariable("iduser") Long iduser) {
+    public ResponseEntity<List<Question>> getFavoriteQuestions(@PathVariable("iduser") Long iduser) {
         List<Question> favoriteQuestions = questionservice.getFavoriteQuestionsByUserId(iduser);
-        return favoriteQuestions;
+        return new ResponseEntity<>(favoriteQuestions, HttpStatus.OK);
     }
+
+    @GetMapping("/categoryStatistics")
+    public ResponseEntity<List<Question>> getCategoryStatistics() {
+        List<Question> stat = questionservice.getCategoryStatistics();
+        return new ResponseEntity<>(stat, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/remove-from-favorites/{userId}/{questionId}")
+    public ResponseEntity<Void> removeQuestionFromFavorites(
+            @PathVariable("userId") Long userId,
+            @PathVariable("questionId") Long questionId) {
+        questionservice.removeQuestionFromFavorites(userId, questionId);
+        return ResponseEntity.ok().build(); // Réponse vide avec statut OK (204)
+    }
+
+
+
+
+
 
 
 

@@ -25,57 +25,54 @@ public class TextSimilarityController {
     @Autowired
     QuestionService questionservice;
     private List<similarityResult> similarityResults = new ArrayList<>();
+
     @PostMapping("/text-similarity")
     public ResponseEntity<?> calculateTextSimilarity(@RequestBody TextSimilarityRequest request) {
-
         List<Question> questions = questionservice.getQuestions();
-        if(questions.size() == 0) {
+
+        if (questions.size() == 0) {
             System.out.println("No Questions");
         }
-        for (int i = 0; i<=questions.size(); i++){
-            if(i == 0 ){
-                similarityResults = new ArrayList<>();
-            }
-            String text2 = questions.get(i).getTitle();
 
-        String text1 = request.getText1();
+        similarityResults.clear(); // Nettoyez la liste à chaque appel
 
-        // Prepare the Python command to execute
-        List<String> command = Arrays.asList("python", "C:/Users/pc/Desktop/fares/courzelobackend-main/target/classes/python/text_similarity.py", text1, text2);
+        for (Question question : questions) {
+            String text2 = question.getContent();
+            String text1 = request.getText1();
 
-        try {
-            // Execute the Python script using ProcessBuilder
-            ProcessBuilder processBuilder = new ProcessBuilder(command);
-            Process process = processBuilder.start();
+            // Prepare the Python command to execute
+            List<String> command = Arrays.asList("python", "C:/Users/pc/Desktop/fares/courzelobackend-main/target/classes/python/text_similarity.py", text1, text2);
 
-            // Read the output from the Python script
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line = bufferedReader.readLine();
-            bufferedReader.close();
+            try {
+                // Execute the Python script using ProcessBuilder
+                ProcessBuilder processBuilder = new ProcessBuilder(command);
+                Process process = processBuilder.start();
 
-            // Check if the line is empty or null
-            if (line != null && !line.isEmpty()) {
-                // Trim and parse the similarity score
-                double similarityScore = Double.parseDouble(line.trim())*100;
-                if(similarityScore >= 90){
-                    similarityResults.add(new similarityResult(questions.get(i).getTitle(),similarityScore ));
+                // Read the output from the Python script
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String line = bufferedReader.readLine();
+                bufferedReader.close();
+
+                // Check if the line is empty or null
+                if (line != null && !line.isEmpty()) {
+                    // Trim and parse the similarity score
+                    double similarityScore = Double.parseDouble(line.trim()) * 100;
+                    if (similarityScore >= 80) {
+                        similarityResults.add(new similarityResult(question.getContent(), similarityScore));
+                    }
+                } else {
+                    System.out.println("Error: Empty or null output from Python script.");
                 }
-                if(i==questions.size() - 1){
-                    return ResponseEntity.ok(similarityResults);
-                }
-            } else {
-                System.out.println("Error: Empty or null output from Python script.");
-            }
 
-            // Wait for the process to complete and get the exit value
-            int exitCode = process.waitFor();
-            System.out.println("Python script executed. Exit code: " + exitCode);
-        } catch (IOException | InterruptedException | NumberFormatException e) {
-            e.printStackTrace();
+                // Wait for the process to complete and get the exit value
+                int exitCode = process.waitFor();
+                System.out.println("Python script executed. Exit code: " + exitCode);
+            } catch (IOException | InterruptedException | NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
 
-        }
-        return ResponseEntity.ok(similarityResults); // Return a default value or handle the error case as needed
+        return ResponseEntity.ok(similarityResults);
     }
-
 }
+
