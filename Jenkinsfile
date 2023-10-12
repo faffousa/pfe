@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        maven = "/opt/apache-maven-3.8.8"
+        MAVEN_HOME = "/opt/apache-maven-3.8.8"
     }
     stages {
         stage('Checkout Git') {
@@ -14,7 +14,7 @@ pipeline {
 
         stage('Testing Maven') {
             steps {
-                sh "mvn -version"
+                sh "$MAVEN_HOME/bin/mvn -version"
             }
         }
 
