@@ -20,7 +20,7 @@ pipeline {
 
         stage('Maven Clean') {
             steps {
-                sh "$MAVEN_HOME/bin/mvn clean"
+                sh "$MAVEN_HOME/bin/mvn clean install -U"
             }
         }
 
