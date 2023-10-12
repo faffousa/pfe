@@ -14,7 +14,7 @@ pipeline {
 
         stage('Testing Maven') {
             steps {
-                sh "$MAVEN_HOME/bin/mvn -version"
+                sh "mvn -version"
             }
         }
 
