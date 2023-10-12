@@ -24,7 +24,11 @@ pipeline {
             }
         }
 
-  
+        stage('Maven Compile') {
+            steps {
+                sh "$MAVEN_HOME/bin/mvn compile"
+            }
+        }
 
         stage('JUnit and Mockito Test') {
             steps {
