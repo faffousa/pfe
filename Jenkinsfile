@@ -62,7 +62,7 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh 'docker push faffousa/tpachat'
+                sh 'docker push faffousa/pfeFares'
             }
         }
 
