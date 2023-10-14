@@ -50,7 +50,7 @@ pipeline {
 
         stage('Docker build') {
             steps {
-                sh 'sudo docker build -t faffousa/tpachat .'
+                sh 'sudo docker build -t faffousa/pfeFares .'
             }
         }
 
@@ -80,7 +80,7 @@ pipeline {
 
         stage('Cleaning up') {
             steps {
-                sh 'docker rmi -f faffousa/tpachat'
+                sh 'docker rmi -f faffousa/pfeFares'
             }
         }
     }
