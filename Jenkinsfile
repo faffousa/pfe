@@ -88,7 +88,7 @@ pipeline {
         script {
             def subject = 'Sujet de l\'e-mail'
             def body = 'Contenu de l\'e-mail'
-            def to = 'fares.aissa@esprit.tn'
+            def to = 'aissa.mounir62@gmail.com'
             emailext (
                 subject: subject,
                 body: body,
