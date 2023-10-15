@@ -83,7 +83,7 @@ pipeline {
         }
     }
 
-    stage('Envoyer un e-mail') {
+ stage('Envoyer un e-mail') {
     steps {
         script {
             def subject = 'Sujet de l\'e-mail'
@@ -99,6 +99,7 @@ pipeline {
         }
     }
 }
+
 
   
 }
