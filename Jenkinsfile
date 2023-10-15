@@ -83,22 +83,7 @@ pipeline {
         }
     }
 
- stage('Envoyer un e-mail') {
-    steps {
-        script {
-            def subject = 'Sujet de l\'e-mail'
-            def body = 'Contenu de l\'e-mail'
-            def to = 'aissa.mounir62@gmail.com'
-            emailext (
-                subject: subject,
-                body: body,
-                to: to,
-                attachLog: true,
-                mimeType: 'text/plain'
-            )
-        }
-    }
-}
+
 
 
   
