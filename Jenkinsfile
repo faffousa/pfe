@@ -82,21 +82,5 @@ pipeline {
             }
         }
     }
-    stage('Envoyer un e-mail') {
-    steps {
-        script {
-            def subject = 'Sujet de l\'e-mail'
-            def body = 'Contenu de l\'e-mail'
-            def to = 'fares.aissa@esprit.tn'
-            emailext (
-                subject: subject,
-                body: body,
-                to: to,
-                attachLog: true,
-                mimeType: 'text/plain'
-            )
-        }
-    }
-}
-
+  
 }
