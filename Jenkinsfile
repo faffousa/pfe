@@ -83,6 +83,17 @@ pipeline {
         }
     }
 
+    stage('Envoi d'e-mail de notification') {
+    steps {
+        emailext(
+            to: 'fares.aissa12345@gmail.com',
+            subject: 'Rapport de build Jenkins',
+            body: 'Votre pipeline Jenkins s'est terminé avec succès.',
+        )
+    }
+}
+
+
 
 
 
