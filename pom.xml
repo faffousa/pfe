@@ -254,7 +254,7 @@
 		<repository>
 			<id>deploymentRepo</id>
 			<name>Nexus Repository</name>
-			<url>http://10.255.255.236:8081/repository/demo/</url>
+			<url>http://10.255.255.236:8081/repository/pfe/</url>
 		</repository>
 	</distributionManagement>
 
