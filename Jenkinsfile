@@ -50,7 +50,7 @@ pipeline {
 
         stage('Docker build') {
             steps {
-                sh 'sudo docker build -t faffousa/pfe .'
+                sh 'sudo docker build -t faffousa/pfe'
             }
         }
 
@@ -62,7 +62,7 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh 'docker push faffousa/pfe'
+                sh 'docker push faffousa/pfefares'
             }
         }
 
@@ -80,7 +80,7 @@ pipeline {
 
         stage('Cleaning up') {
             steps {
-                sh 'docker rmi -f faffousa/pfe'
+                sh 'docker rmi -f faffousa/pfefares'
             }
         }
 
