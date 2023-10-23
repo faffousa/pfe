@@ -50,7 +50,7 @@ pipeline {
 
         stage('Docker build') {
             steps {
-                sh 'sudo docker build -t faffousa/tpachat .'
+                sh 'sudo docker build -t faffousa/pfe .'
             }
         }
 
@@ -62,7 +62,7 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh 'docker push faffousa/tpachat'
+                sh 'docker push faffousa/pfe'
             }
         }
 
@@ -72,15 +72,11 @@ pipeline {
             }
         }
 
-        stage('NEXUS') {
-            steps {
-                sh "$MAVEN_HOME/bin/mvn deploy -DskipTests"
-            }
-        }
+     
 
         stage('Cleaning up') {
             steps {
-                sh 'docker rmi -f faffousa/tpachat'
+                sh 'docker rmi -f faffousa/pfe'
             }
         }
     }
