@@ -72,6 +72,12 @@ pipeline {
             }
         }
 
+          stage('NEXUS') {
+            steps {
+                sh "$MAVEN_HOME/bin/mvn deploy -DskipTests"
+            }
+        }
+
     
 
      
