@@ -1,8 +1,14 @@
 pipeline {
     agent any
+
     environment {
         MAVEN_HOME = "/opt/apache-maven-3.8.8"
+        NEXUS_REPO_ID = 'nexus-pfe'
+        NEXUS_REPO_URL = 'http://192.168.1.108:8081/repository/pfe/'
+        NEXUS_REPO_USERNAME = 'admin'
+        NEXUS_REPO_PASSWORD = 'fares123'
     }
+
     stages {
         stage('Checkout Git') {
             steps {
@@ -42,7 +48,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube analysis 1') {
+        stage('SonarQube analysis') {
             steps {
                 sh "$MAVEN_HOME/bin/mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=fares123"
             }
@@ -60,9 +66,21 @@ pipeline {
             }
         }
 
-        stage('Push') {
+        stage('Push Docker Image') {
             steps {
                 sh 'docker push faffousa/pfe'
+            }
+        }
+
+        stage('Deploy to Nexus Repository') {
+            steps {
+                sh "$MAVEN_HOME/bin/mvn deploy:deploy-file " +
+                   "-Durl=$NEXUS_REPO_URL " +
+                   "-DrepositoryId=$NEXUS_REPO_ID " +
+                   "-Dfile=path/to/your/artifact.jar " + // Remplacez ceci par le chemin de votre artefact
+                   "-DgroupId=com.example " + // Remplacez par le groupId de votre artefact
+                   "-DartifactId=your-artifact " + // Remplacez par l'artifactId de votre artefact
+                   "-Dversion=1.0" // Remplacez par la version de votre artefact
             }
         }
 
@@ -72,19 +90,13 @@ pipeline {
             }
         }
 
-    
-
-    
-
-     
-
         stage('Cleaning up') {
             steps {
                 sh 'docker rmi -f faffousa/pfe'
             }
         }
 
-           stage('Send Email Notification') {
+        stage('Send Email Notification') {
             steps {
                 emailext(
                     to: 'fares.aissa@esprit.tn',
@@ -93,7 +105,5 @@ pipeline {
                 )
             }
         }
-
-        
     }
 }
