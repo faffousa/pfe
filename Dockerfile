@@ -1,14 +1,10 @@
-# Utilisez une image Docker avec Java 11
-FROM adoptopenjdk:11-jre-hotspot
+ FROM openjdk:8
+EXPOSE 8088
 
-# Définissez le répertoire de travail
-WORKDIR /app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+ONBUILD ADD . /usr/src/app
+ONBUILD RUN mvn install -DskipTests
+ONBUILD ADD /usr/src/app/target/devopsProject-1.0.jar app.jar
 
-# Copiez le fichier JAR généré par Maven (assurez-vous que le nom du JAR correspond à votre projet)
-COPY target/app-0.0.1-SNAPSHOT.jar app.jar
-
-# Exposez le port sur lequel votre application écoute (8080 par défaut)
-EXPOSE 8082
-
-# Commande pour exécuter l'application lorsque le conteneur démarre
-CMD ["java", "-jar", "app.jar"]
+CMD ["java","-jar","/app.jar"]
