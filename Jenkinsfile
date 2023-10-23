@@ -82,13 +82,6 @@ pipeline {
             }
         }
 
-          stage('Send Email Notification') {
-            steps {
-                emailext(
-                    to: 'fares.aissa@esprit.tn',
-                    subject: 'Pipeline executed successfully',
-                    body: 'Your Jenkins pipeline has been executed successfully.',
-                )
-            }
+        
     }
 }
