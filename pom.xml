@@ -250,16 +250,13 @@
         </plugins>
 	</build>
 
-	<distributionManagement>
-    <repository>
-        <id>nexus-releases</id>
-        <url>http://10.255.255.236:8081/faffousa/pfe/</url>
-    </repository>
-    <snapshotRepository>
-        <id>nexus-snapshots</id>
-        <url>http://http://10.255.255.236:8081//faffousa/pfe/</url>
-    </snapshotRepository>
-</distributionManagement>
+<distributionManagement>
+		<repository>
+			<id>deploymentRepo</id>
+			<name>Nexus Repository</name>
+			<url>http://10.255.255.236:8081/repository/demo/</url>
+		</repository>
+	</distributionManagement>
 
 
 </project>
