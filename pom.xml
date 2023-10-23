@@ -24,6 +24,14 @@
 		<nexus.repo.password>fares123</nexus.repo.password>
 	
 	</properties>
+	
+	<distributionManagement>
+		<repository>
+			<id>${nexus.repo.id}</id>
+			<url>${nexus.repo.url}</url>
+		</repository>
+	</distributionManagement>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -261,11 +269,6 @@
         </plugins>
 	</build>
 
-		<distributionManagement>
-		<repository>
-			<id>${nexus.repo.id}</id>
-			<url>${nexus.repo.url}</url>
-		</repository>
-	</distributionManagement>
+	
 
 </project>
