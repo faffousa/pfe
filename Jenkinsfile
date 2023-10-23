@@ -72,17 +72,19 @@ pipeline {
             }
         }
 
-        stage('Deploy to Nexus Repository') {
-            steps {
-                sh "$MAVEN_HOME/bin/mvn deploy:deploy-file " +
-                   "-Durl=$NEXUS_REPO_URL " +
-                   "-DrepositoryId=$NEXUS_REPO_ID " +
-                   "-Dfile=path/to/your/artifact.jar " + // Remplacez ceci par le chemin de votre artefact
-                   "-DgroupId=com.example " + // Remplacez par le groupId de votre artefact
-                   "-DartifactId=your-artifact " + // Remplacez par l'artifactId de votre artefact
-                   "-Dversion=1.0" // Remplacez par la version de votre artefact
-            }
-        }
+   stage('Deploy to Nexus Repository') {
+    steps {
+        sh "$MAVEN_HOME/bin/mvn deploy:deploy-file " +
+           "-Durl=$NEXUS_REPO_URL " +
+           "-DrepositoryId=$NEXUS_REPO_ID " +
+           "-Dfile=\$WORKSPACE/target/app-0.0.1-SNAPSHOT.jar " +
+           "-DgroupId=com.vermeg " +
+           "-DartifactId=app " +
+           "-Dversion=0.0.1-SNAPSHOT " +
+           "-Dpackaging=jar"
+    }
+}
+
 
         stage('Run app With DockerCompose') {
             steps {
