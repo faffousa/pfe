@@ -72,18 +72,6 @@ pipeline {
             }
         }
 
-   stage('Deploy to Nexus Repository') {
-    steps {
-        sh "$MAVEN_HOME/bin/mvn deploy:deploy-file " +
-           "-Durl=$NEXUS_REPO_URL " +
-           "-DrepositoryId=$NEXUS_REPO_ID " +
-           "-Dfile=\$WORKSPACE/target/app-0.0.1-SNAPSHOT.jar " +
-           "-DgroupId=com.vermeg " +
-           "-DartifactId=app " +
-           "-Dversion=0.0.1-SNAPSHOT " +
-           "-Dpackaging=jar"
-    }
-}
 
 
         stage('Run app With DockerCompose') {
