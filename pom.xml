@@ -253,7 +253,7 @@
 	<distributionManagement>
     <repository>
         <id>nexus-releases</id>
-        <url>http://10.255.255.232:8081/repository/pfe/</url>
+        <url>http://10.255.255.236:8081/repository/pfe/</url>
     </repository>
     <snapshotRepository>
         <id>nexus-snapshots</id>
