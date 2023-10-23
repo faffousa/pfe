@@ -50,7 +50,7 @@ pipeline {
 
         stage('Docker build') {
             steps {
-                sh 'sudo docker build -t faffousa/pfe'
+                sh 'sudo docker build -t faffousa/tpachat .'
             }
         }
 
@@ -62,7 +62,7 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh 'docker push faffousa/pfefares'
+                sh 'docker push faffousa/tpachat'
             }
         }
 
@@ -72,25 +72,15 @@ pipeline {
             }
         }
 
-            stage('NEXUS') {
+        stage('NEXUS') {
             steps {
-                sh "$MAVEN_HOME/bin/mvn deploy "
+                sh "$MAVEN_HOME/bin/mvn deploy -DskipTests"
             }
         }
 
         stage('Cleaning up') {
             steps {
-                sh 'docker rmi -f faffousa/pfefares'
-            }
-        }
-
-        stage('Envoi d\'e-mail de notification') {
-            steps {
-                emailext(
-                    to: 'fares.aissa@esprit.tn',
-                    subject: 'Rapport de build Jenkins',
-                    body: 'Votre pipeline Jenkins s\'est terminé avec succès.',
-                )
+                sh 'docker rmi -f faffousa/tpachat'
             }
         }
     }
