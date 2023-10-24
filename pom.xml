@@ -17,18 +17,17 @@
         <java.version>11</java.version>
         <spring-cloud.version>2021.0.0</spring-cloud.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
-        <nexus.repo.id>nexus-pfe</nexus.repo.id>
-        <nexus.repo.url>http://192.168.1.108:8081/repository/pfe/</nexus.repo.url>
-        <nexus.repo.username>admin</nexus.repo.username>
-        <nexus.repo.password>fares123</nexus.repo.password>
+    
 	</properties>
 
-	  <distributionManagement>
+		 <distributionManagement>
         <repository>
-            <id>${nexus.repo.id}</id>
-            <url>${nexus.repo.url}</url>
+            <id>nexus-pfe</id> <!-- ID du serveur correspondant dans votre settings.xml -->
+            <url>http://192.168.1.108:8081/repository/pfe/</url> <!-- URL de votre référentiel Nexus -->
         </repository>
     </distributionManagement>
+
+     
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
