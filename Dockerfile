@@ -1,10 +1,15 @@
-FROM openjdk:11
-EXPOSE 8082
+# Stage 1: Build the application
+FROM maven:3.8.3-jdk-11 AS builder
+WORKDIR /app
+COPY pom.xml .
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+COPY src/ src/
+RUN --mount=type=cache,target=/root/.m2 mvn package
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-ONBUILD ADD . /usr/src/app
-ONBUILD RUN mvn install -DskipTests
-ONBUILD ADD /usr/src/app/target/pfe-1.0.jar app.jar
-
-CMD ["java","-jar","/app.jar"]
+# Stage 2: Create the runtime container
+FROM adoptopenjdk/openjdk11:jre-11.0.12_7-alpine
+EXPOSE 8998
+COPY --from=builder /app/target/app-0.0.1-SNAPSHOT.jar /app-0.0.1-SNAPSHOT.jar
+ENV JAVA_OPTS="-Dlogging.level.org.springframework.security=DEBUG"
+ENV SERVER_URL=http://185.192.96.18/
+ENTRYPOINT ["java", "-Djdk.tls.client.protocols=TLSv1.2", "-jar", "/app-0.0.1-SNAPSHOT.jar"]
