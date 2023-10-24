@@ -2,8 +2,8 @@ version: "2"
 
 services:
   app:
-    image: faffousa/pfe:courzeloapp
-    container_name: courzeloapp
+    image: faffousa/pfe
+    container_name: pfe
     restart: on-failure
     ports:
       - 8082:8082
