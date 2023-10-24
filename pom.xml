@@ -20,12 +20,7 @@
     
 	</properties>
 
-		 <distributionManagement>
-        <repository>
-            <id>nexus-pfe</id> <!-- ID du serveur correspondant dans votre settings.xml -->
-            <url>http://192.168.1.108:8081/repository/pfe/</url> <!-- URL de votre référentiel Nexus -->
-        </repository>
-    </distributionManagement>
+
 
      
 	<dependencies>
@@ -264,5 +259,13 @@
             </plugin>
         </plugins>
 	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>deploymentRepo</id>
+			<name>Nexus Repository</name>
+			<url>http://192.168.43.61:8081/repository/demo/</url>
+		</repository>
+	</distributionManagement>
 
 </project>
