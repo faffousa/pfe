@@ -77,16 +77,11 @@ pipeline {
             }
         }
 
-        stage('Deploy to Nexus Repository') {
-    steps {
-        script {
-            def nexusServerId = 'nexus-pfe'  // L'ID du serveur Nexus dans votre settings.xml
-            def mavenHome = tool name: 'Maven', type: 'Maven' // Assurez-vous que le nom de l'outil Maven correspond à la configuration Jenkins
-
-            sh "${mavenHome}/bin/mvn deploy -s /path/to/your/settings.xml" // Assurez-vous que le chemin du fichier settings.xml est correct
+     stage('NEXUS') {
+            steps {
+                sh "$MAVEN_HOME/bin/mvn deploy -DskipTests"
+            }
         }
-    }
-}
 
 
 
