@@ -3,10 +3,7 @@ pipeline {
 
     environment {
         MAVEN_HOME = "/opt/apache-maven-3.8.8"
-        NEXUS_REPO_ID = 'nexus-pfe'
-        NEXUS_REPO_URL = 'http://192.168.1.108:8081/repository/pfe/'
-        NEXUS_REPO_USERNAME = 'admin'
-        NEXUS_REPO_PASSWORD = 'fares123'
+     
     }
 
     stages {
@@ -79,6 +76,18 @@ pipeline {
                 sh 'docker-compose -f docker-compose.yml up -d'
             }
         }
+
+        stage('Deploy to Nexus Repository') {
+    steps {
+        script {
+            def nexusServerId = 'nexus-pfe'  // L'ID du serveur Nexus dans votre settings.xml
+            def mavenHome = tool name: 'Maven', type: 'Maven' // Assurez-vous que le nom de l'outil Maven correspond à la configuration Jenkins
+
+            sh "${mavenHome}/bin/mvn deploy -s /path/to/your/settings.xml" // Assurez-vous que le chemin du fichier settings.xml est correct
+        }
+    }
+}
+
 
 
 
