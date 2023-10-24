@@ -11,5 +11,5 @@ FROM adoptopenjdk/openjdk11:jre-11.0.12_7-alpine
 EXPOSE 8998
 COPY --from=builder /app/target/app-0.0.1-SNAPSHOT.jar /app-0.0.1-SNAPSHOT.jar
 ENV JAVA_OPTS="-Dlogging.level.org.springframework.security=DEBUG"
-ENV SERVER_URL=http://185.192.96.18/
+ENV SERVER_URL=http://192.168.1.108/
 ENTRYPOINT ["java", "-Djdk.tls.client.protocols=TLSv1.2", "-jar", "/app-0.0.1-SNAPSHOT.jar"]
